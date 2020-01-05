@@ -1,0 +1,15 @@
+extends ./layout/board.pug
+block title
+  div.jumbotron
+    h2= title
+      small - 게시판 작성
+block content
+  .write-wrap
+    table.table.table-bordered
+      tbody
+        tr
+          td 작성자
+          td
+            input.form-control(type="text" name="writer")
+
+

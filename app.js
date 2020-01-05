@@ -16,3 +16,24 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.locals.pretty = true;
+
+// 멀티 페이지 라우터
+app.get(['/pug', '/pug/:page'], (req, res) => {
+    let page = req.params.page ? req.params.page : "list";
+    let vals = {};
+
+    switch (page) {
+        case "list":
+            vals.title = "게시글 리스트 입니다.";
+            res.render("list.pug", vals);
+            // res.render("layout/list.pug", vals); // 경로라면 이렇게??
+            break;
+        case "write":
+            vals.title = "게시글 작성 입니다.";
+            res.render("write.pug", vals);
+            break;
+        default:
+            res.redirect('/'); // location.href랑 같음
+            break;
+    }
+});
