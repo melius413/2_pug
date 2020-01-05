@@ -2,14 +2,14 @@ extends ./layout/board.pug
 block title
   div.jumbotron
     h2= title
-      small - 게시판 작성
+      small - 게시글 작성 입니다.
 block content
-  .write-wrap
+  form(action="/board" method="post" name="writeForm").write-wrap
     table.table.table-bordered
       tbody
         tr
           td 작성자
           td
-            input.form-control(type="text" name="writer")
+            input.form-control(type="text" name="writer" placeholder="작성자")
 
 
