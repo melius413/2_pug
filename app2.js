@@ -1,4 +1,5 @@
 const express = require('express');
+const methodOverride = require('method-override');
 const app = express();
 const port = 3000;
 const host = '127.0.0.1';
@@ -11,11 +12,21 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 app.use('/', express.static('./public'));
 
-app.use(express.json());
+app.use(express.json());    // ajax 통신의 REST는 PUT, DELETE 해당부분이 처리함
 app.use(express.urlencoded({
     extended: true
 }));
 app.locals.pretty = true;
+
+// custom logic >> form에서 post방식으로 보낼때 사용 ($.ajax 통신에 사용안됨)
+app.use(methodOverride((req, res) => {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        // look in urlencoded POST bodies and delete it
+        let method = req.body._method
+        delete req.body._method
+        return method
+    }
+}));
 
 /* Router */
 const pugRouter = require("./router/pug");
