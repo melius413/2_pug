@@ -21,5 +21,11 @@ SELECT id, title FROM board ORDER BY id DESC;
 -- SELECT * FROM board WHERE id = 4;
 -- SELECT * FROM board WHERE title LIKE '%노드%'; 와일드 카드
 SELECT * FROM board WHERE id=4;
+~~~
 
+## Delete
+~~~sql
+-- DELETE, UPDATE에서는 WHERE절을 꼭 구현하자. 없으면 모든 Data에 영향을 준다.
+-- DELETE FROM board; 보드에 있는 모든 데이터 삭제(절대 이렇게 쓰면 안됨)
+-- DELETE FROM board WHERE id=4;
 ~~~

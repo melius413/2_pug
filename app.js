@@ -97,6 +97,20 @@ app.get('/pug/view/:id', async (req, res) => {
     res.render("view.pug", vals);
 });
 
+app.get("/pug/delete/:id", async (req, res) => {
+    let id = req.params.id;
+    let sql = "DELETE FROM board WHERE id=" + id;
+    const connect = await pool.getConnection();
+    const result = await connect.query(sql);
+    //res.json(result[0]);
+    if(result[0].affectedRows == 1) {
+        res.redirect("/pug");
+    }
+    else {
+        res.send("삭제에 실패하였습니다.");
+    }
+});
+
 // mysql 모듈 버전
 // app.get("/sqltest", (req, res) => {
 //     conn.getConnection((err, connect) => { // connectionLimit: 10 개 중에 하나 를 connect로 줌
