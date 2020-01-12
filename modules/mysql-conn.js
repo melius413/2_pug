@@ -20,7 +20,7 @@ module.exports = {
 }
 */
 // const mysql = require('mysql2');    // 기존방식 버전 mysql2/index.js
-const mysql = require('mysql2/promise');    // 프로미스 방식 버전 mysql2/promise/index.js
+const mysql = require('mysql2/promise');    // 프로미스 방식 버전 mysql2/promise.js
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',

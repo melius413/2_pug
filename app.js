@@ -84,6 +84,19 @@ app.get(['/pug', '/pug/:page'], async (req, res) => {
     }
 });
 
+app.get('/pug/view/:id', async (req, res) => {
+    let vals = {
+        title: "게시글 상세 보기",
+    }
+    let id = req.params.id;
+    let sql = "SELECT * FROM board WHERE id=" + id;
+    const connect = await pool.getConnection();
+    const result = await connect.query(sql);
+    vals.data = result[0][0];
+    // res.json(result[0][0]);
+    res.render("view.pug", vals);
+});
+
 // mysql 모듈 버전
 // app.get("/sqltest", (req, res) => {
 //     conn.getConnection((err, connect) => { // connectionLimit: 10 개 중에 하나 를 connect로 줌
@@ -118,8 +131,8 @@ app.get("/sqltest", async (req, res) => { // 비동기 쓸수 있다는 뜻 asyn
 });
 
 app.post('/board', async (req, res) => {
-    let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?';
-    let val = [req.body.title, req.body.writer, new Date()];
+    let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?, content=?';
+    let val = [req.body.title, req.body.writer, new Date(), req.body.content];
     const connect = await pool.getConnection();
     const result = await connect.query(sql,val);
     connect.release(); // pool에게 돌려주기(반납)

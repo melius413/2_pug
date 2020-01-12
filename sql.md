@@ -17,4 +17,9 @@ SELECT * FROM board ORDER BY id DESC;
 
 -- SELECT 필드명1, 필드명2 FROM board ORDER BY id DESC;
 SELECT id, title FROM board ORDER BY id DESC;
+
+-- SELECT * FROM board WHERE id = 4;
+-- SELECT * FROM board WHERE title LIKE '%노드%'; 와일드 카드
+SELECT * FROM board WHERE id=4;
+
 ~~~
