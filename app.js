@@ -47,7 +47,8 @@ app.use('/', express.static('./public'));
 
 app.use(express.json());
 app.use(express.urlencoded({
-    extended: false
+    // extended: false
+    extended: true
 }));
 app.locals.pretty = true;
 
@@ -64,6 +65,7 @@ app.get(['/pug', '/pug/:page'], async (req, res) => {
             let sql = "SELECT * FROM board ORDER BY id DESC"; // 세미콜론 생략?
             const connect = await pool.getConnection();
             const result = await connect.query(sql);
+            connect.release();
             // res.json(result);  // res.render 동시에 못쓴다 res.응답메소드는 한번만
             // res.json(result[0]);
             vals.lists = result[0];
@@ -95,6 +97,7 @@ app.get('/pug/view/:id', async (req, res) => {
     let sql = "SELECT * FROM board WHERE id=" + id;
     const connect = await pool.getConnection();
     const result = await connect.query(sql);
+    connect.release();
     vals.data = result[0][0];
     // res.json(result[0][0]);
     res.render("view.pug", vals);
@@ -105,6 +108,7 @@ app.get("/pug/delete/:id", async (req, res) => {
     let sql = "DELETE FROM board WHERE id=" + id;
     const connect = await pool.getConnection();
     const result = await connect.query(sql);
+    connect.release();
     //res.json(result[0]);
     if(result[0].affectedRows == 1) {
         res.redirect("/pug");
@@ -122,6 +126,7 @@ app.get("/pug/update/:id", async (req, res) => {
     const sql = "SELECT * FROM board WHERE id=" + id;
     const connect = await pool.getConnection();
     const result = await connect.query(sql);
+    connect.release();
     //res.json(result[0]);
     vals.data = result[0][0];
     res.render("update.pug", vals);
@@ -135,6 +140,7 @@ app.post("/pug/update", async (req, res) => {
     const sql = "UPDATE board SET title=?, content=? WHERE id=?";
     const connect = await pool.getConnection();
     const result = await connect.query(sql, sqlVals);
+    connect.release();
     //res.json(result[0]);
     if(result[0].changedRows == 1) {
         res.redirect("/pug");
