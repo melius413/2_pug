@@ -23,9 +23,17 @@ SELECT id, title FROM board ORDER BY id DESC;
 SELECT * FROM board WHERE id=4;
 ~~~
 
+## Update
+~~~sql
+-- DELETE, UPDATE에서는 WHERE절을 꼭 구현하자. 없으면 모든 Data에 영향을 준다.
+-- UPDATE 테이블명 SET 필드명='값', 필드명='값' WHERE 조건;
+UPDATE board SET title='제목', content='내용' WHERE id=4;
+~~~
+
 ## Delete
 ~~~sql
 -- DELETE, UPDATE에서는 WHERE절을 꼭 구현하자. 없으면 모든 Data에 영향을 준다.
 -- DELETE FROM board; 보드에 있는 모든 데이터 삭제(절대 이렇게 쓰면 안됨)
--- DELETE FROM board WHERE id=4;
+-- DELETE FROM board WHERE 조건;
+DELETE FROM board WHERE id=4;
 ~~~

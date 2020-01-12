@@ -7,7 +7,6 @@ const {
     pool,
     sqlErr
 } = require('./modules/mysql-conn'); // js(확장자 생력가능), mysql2 모듈 버전
-const routerSample = require('./router/pug');
 
 // { mysql, conn } = ... 객체속성 바로 할당가능 ex6문법
 // { mysql, conn } = { mysql:'fafdsf', conn:'fafdsf' };
@@ -50,8 +49,6 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.locals.pretty = true;
-
-app.use("/router", routerSample);
 
 // 멀티 페이지 라우터
 app.get(['/pug', '/pug/:page'], async (req, res) => {
