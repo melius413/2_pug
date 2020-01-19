@@ -23,6 +23,18 @@ const filename = (req, file, cb) => { // 파일명 설정
     // file.fieldname, filename, originalname ...
 }
 
+const fileFilter = (req, file, cb) => {
+    let allowExt = ['.jpg', '.jpeg', '.gif', '.png', '.zip', '.txt', '.pdf'];
+    let ext = path.extname(file.originalname).toLocaleLowerCase();
+    if (allowExt.indexOf(ext) > -1) {
+        req.fileUploadChk = true;
+        cb(null, true); // error, result
+    } else {
+        req.fileUploadChk = false;
+        cb(null, false);
+    }
+}
+
 // const storage = multer.diskStorage({
 //     destination: destination,
 //     filename: filename
@@ -34,7 +46,8 @@ const storage = multer.diskStorage({ // es6, 키과 값이 같으면 축약표�
 });
 
 const upload = multer({
-    storage
+    storage,
+    fileFilter
 });
 
 function getPath() {
@@ -43,6 +56,8 @@ function getPath() {
     console.log(newPath);
     // https://nodejs.org/dist/latest-v12.x/docs/api/fs.html#fs_fs_existssync_path
     if (!fs.existsSync(newPath)) { // 폴더 존재여부확인
+        // try { fs.mkdirSync(newPath); }
+        // catch(err) { return err; }
         fs.mkdirSync(newPath);
     }
     return newPath;

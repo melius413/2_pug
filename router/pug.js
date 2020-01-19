@@ -44,7 +44,13 @@ router.get(['/', '/:page'], async (req, res) => {
             const connect = await pool.getConnection();
             const result = await connect.query(sql);
             connect.release();
+            for (let v of result[0]) { // es6
+                if (v.realfile) {
+                    v.fileIcon = true;
+                }
+            }
             vals.lists = result[0];
+            // res.json(vals.lists);
             res.render("list.pug", vals);
             break;
         case "write":
@@ -76,6 +82,15 @@ router.get('/view/:id', async (req, res) => {
     connect.release();
     vals.data = result[0][0];
     // res.json(result[0][0]);
+    if (vals.data.realfile) {
+        let file = vals.data.realfile.split('-');
+        let filepath = "/uploads/" + file[0] + '/' + vals.data.realfile;
+        vals.data.filepath = filepath;
+        let img = ['.jpg', '.jpeg', '.gif', '.png'];
+        let ext = path.extname(vals.data.realfile).toLowerCase();
+        if (img.indexOf(ext) > -1) vals.data.fileChk = "img";
+        else vals.data.fileChk = "file";
+    } else vals.data.fileChk = "";
     res.render("view.pug", vals);
 });
 
@@ -131,8 +146,16 @@ router.post("/update", async (req, res) => {
 // 미들웨어의 결과는 req에 포함되어 다음 함수에전달된다.
 router.post('/create', upload.single("upfile"), async (req, res) => {
     console.log("post create");
+    // console.log("req.fileUploadChk", req.fileUploadChk); // undefined(user didnot), false(ban), true
+    let oriFile = '';
+    let realFile = '';
+    if (req.file) {
+        oriFile = req.file.originalname;
+        realFile = req.file.filename;
+    } else { // req.file == undefined
+    }
     let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?, content=?, orifile=?, realfile=?';
-    let val = [req.body.title, req.body.writer, new Date(), req.body.content, req.file.originalname, req.file.filename];
+    let val = [req.body.title, req.body.writer, new Date(), req.body.content, oriFile, realFile];
     const connect = await pool.getConnection();
     const result = await connect.query(sql, val);
     connect.release(); // pool에게 돌려주기(반납)
