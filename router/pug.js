@@ -163,4 +163,16 @@ router.post('/create', upload.single("upfile"), async (req, res) => {
     res.redirect('/pug');
 });
 
+router.get("/download/:id", async (req, res) => {
+    let id = req.params.id;
+    let sql = "SELECT realfile, orifile FROM board WHERE id=" + id;
+    const connect = await pool.getConnection();
+    const result = await connect.query(sql);
+    // res.json(result[0][0]);
+    // let filepath = path.join(__dirname, "../uploads/", result[0][0].realfile.split("-")[0]);
+    let filepath = path.join(__dirname, "../uploads/" + result[0][0].realfile.split("-")[0]);
+    let file = filepath + '/' + result[0][0].realfile;
+    res.download(file, result[0][0].orifile); // express에서 지원해주는 다운로드 기능(이름을 바꾸어 내려보냄)
+});
+
 module.exports = router;
