@@ -55,11 +55,18 @@ router.get('/view/:id', async (req, res) => {
     console.log("get view");
     let vals = {
         title: "게시글 상세 보기",
-    }
+    };
+    // 클라이언트 IP 확인하기
+    // console.log(req.headers['x-forwarded-for']);
+    // console.log(req.headers.host); // 서버주소
+    // console.log(req.connect.remoteAddress);
+    // console.log(req.ip);
     let id = req.params.id;
-    let sql = "SELECT * FROM board WHERE id=" + id;
     const connect = await pool.getConnection();
-    const result = await connect.query(sql);
+    let sql = "UPDATE board SET rnum = rnum + 1 WHERE id =" + id;
+    let result = await connect.query(sql);
+    sql = "SELECT * FROM board WHERE id=" + id;
+    result = await connect.query(sql);
     connect.release();
     vals.data = result[0][0];
     // res.json(result[0][0]);
@@ -73,10 +80,9 @@ router.get("/delete/:id", async (req, res) => {
     const connect = await pool.getConnection();
     const result = await connect.query(sql);
     connect.release();
-    if(result[0].affectedRows == 1) {
+    if (result[0].affectedRows == 1) {
         res.redirect("/pug");
-    }
-    else {
+    } else {
         res.send("삭제에 실패하였습니다.");
     }
 });
@@ -107,10 +113,9 @@ router.post("/update", async (req, res) => {
     const result = await connect.query(sql, sqlVals);
     connect.release();
     //res.json(result[0]);
-    if(result[0].changedRows == 1) {
+    if (result[0].changedRows == 1) {
         res.redirect("/pug");
-    }
-    else {
+    } else {
         res.send("수정에 실패하였습니다.");
     }
 });
@@ -120,7 +125,7 @@ router.post('/create', async (req, res) => {
     let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?, content=?';
     let val = [req.body.title, req.body.writer, new Date(), req.body.content];
     const connect = await pool.getConnection();
-    const result = await connect.query(sql,val);
+    const result = await connect.query(sql, val);
     connect.release(); // pool에게 돌려주기(반납)
     // res.json(result);
     res.redirect('/pug');

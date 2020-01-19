@@ -16,7 +16,7 @@ HTML은 get, post만 있음
 method-override 모듈 사용 필요
 */
 
-router.get(["/get", "/get/:id"], async (req, res) => {
+router.get(["/", "/get", "/get/:id"], async (req, res) => {
     let sql = '';
     const vals = {
         title: "API 게시판"
