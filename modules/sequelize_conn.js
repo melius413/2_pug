@@ -12,12 +12,13 @@ const sequelize = new Sequelize({ // config 안쓰는 방법
     }
 });
 
-(async () => {
-    await sequelize.authenticate(); // 접속하는 명령
-    console.log("success");
-})();
+// method 1 : check models User.js
+// (async () => {
+//     await sequelize.authenticate(); // 접속하는 명령
+//     console.log("success");
+// })();
 
 module.exports = {
-    sequelize,
+    sequelize, // method1 접속한 객체, method2 접속전 객체
     Sequelize
 };

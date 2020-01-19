@@ -34,8 +34,10 @@ app.use(methodOverride((req, res) => {
 /* Router */
 const pugRouter = require(path.join(__dirname, "./router/pug"));
 const apiRouter = require(path.join(__dirname, "./router/api"));
+const userRouter = require(path.join(__dirname, "./router/user"));
 app.use('/pug', pugRouter);
 app.use('/api', apiRouter);
+app.use('/user', userRouter);
 
 // mysql2 모듈 버전
 // app.get("/sqltest", async (req, res) => { // 비동기 쓸수 있다는 뜻 async
