@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const dateTime = require('date-time');
 const path = require('path');
 const {
     pool,
@@ -49,7 +50,12 @@ router.get(['/', '/:page'], async (req, res) => {
                     v.fileIcon = true;
                 }
             }
-            vals.lists = result[0];
+            const resultData = result[0].map((v) => {
+                // v.wdate = dateTime(v.wdate);
+                v.wdate = dateTime({date: v.wdate});
+                return v;
+            });
+            vals.lists = resultData;
             // res.json(vals.lists);
             res.render("list.pug", vals);
             break;
