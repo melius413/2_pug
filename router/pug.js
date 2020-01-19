@@ -5,6 +5,8 @@ const {
     sqlErr
 } = require('../modules/mysql-conn'); // js(확장자 생력가능), mysql2 모듈 버전
 
+console.log(__dirname); // pug.js의 절대경로
+
 /*
 url:/pug/update/4 요청처리시
 1. 라우터 없이 사용
