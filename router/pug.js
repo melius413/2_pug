@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const {
     pool,
     sqlErr
-} = require('../modules/mysql-conn'); // js(확장자 생력가능), mysql2 모듈 버전
+} = require(path.join(__dirname, '../modules/mysql-conn')); // js(확장자 생력가능), mysql2 모듈 버전
+const {
+    upload
+} = require(path.join(__dirname, '../modules/multer-conn'));
 
 console.log(__dirname); // pug.js의 절대경로
 
@@ -122,10 +126,13 @@ router.post("/update", async (req, res) => {
     }
 });
 
-router.post('/create', async (req, res) => {
+// multer.single("upfile") >> 파일 하나 올릴때
+// upload.single("upfile")도 인수 req가 들어간다. (미들웨어)
+// 미들웨어의 결과는 req에 포함되어 다음 함수에전달된다.
+router.post('/create', upload.single("upfile"), async (req, res) => {
     console.log("post create");
-    let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?, content=?';
-    let val = [req.body.title, req.body.writer, new Date(), req.body.content];
+    let sql = 'INSERT INTO board SET title=?, writer=?, wdate=?, content=?, orifile=?, realfile=?';
+    let val = [req.body.title, req.body.writer, new Date(), req.body.content, req.file.originalname, req.file.filename];
     const connect = await pool.getConnection();
     const result = await connect.query(sql, val);
     connect.release(); // pool에게 돌려주기(반납)
